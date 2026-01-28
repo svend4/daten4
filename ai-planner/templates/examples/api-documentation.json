@@ -1,0 +1,412 @@
+{
+  "id": "template-api-docs-001",
+  "version": "2.0-ai",
+  "name": "API Documentation Template",
+  "description": "Полный шаблон документации REST API проекта. Используется для документирования всех endpoints, моделей данных, аутентификации и примеров использования.",
+  "metadata": {
+    "category": "documentation",
+    "language": "ru",
+    "tags": ["api", "documentation", "rest", "technical"],
+    "author": "AI Planner Team",
+    "createdAt": "2026-01-26T10:00:00Z",
+    "estimatedLines": 5000,
+    "aiEnabled": true
+  },
+  "sections": [
+    {
+      "id": "section-001",
+      "name": "Общая информация о проекте",
+      "description": "Базовая информация о проекте и его API",
+      "tags": ["intro", "overview"],
+      "fields": [
+        {
+          "id": "field-project-name",
+          "type": "text",
+          "label": "Название проекта",
+          "placeholder": "Например: User Management API",
+          "required": true,
+          "aiHints": [
+            "Используйте краткое, но информативное название",
+            "Формат: [Назначение] + API"
+          ],
+          "aiExamples": [
+            "E-commerce API",
+            "Task Management API",
+            "Analytics Service API"
+          ]
+        },
+        {
+          "id": "field-project-description",
+          "type": "textarea",
+          "label": "Описание проекта",
+          "placeholder": "Краткое описание назначения API...",
+          "required": true,
+          "aiPrompt": "Создай краткое описание API на основе названия проекта. Укажи основное назначение и ключевые возможности.",
+          "aiAutoFill": true,
+          "aiDependsOn": ["field-project-name"]
+        },
+        {
+          "id": "field-base-url",
+          "type": "url",
+          "label": "Base URL",
+          "placeholder": "https://api.example.com",
+          "required": true,
+          "aiValidation": {
+            "pattern": "^https?://.*",
+            "errorMessage": "URL должен начинаться с http:// или https://"
+          }
+        },
+        {
+          "id": "field-version",
+          "type": "text",
+          "label": "Версия API",
+          "placeholder": "v1.0.0",
+          "required": true,
+          "aiHints": ["Используйте semantic versioning (major.minor.patch)"]
+        },
+        {
+          "id": "field-contact-email",
+          "type": "email",
+          "label": "Контактный email",
+          "placeholder": "api-support@example.com",
+          "required": false
+        }
+      ]
+    },
+    {
+      "id": "section-002",
+      "name": "Аутентификация",
+      "description": "Методы аутентификации и авторизации",
+      "tags": ["auth", "security"],
+      "fields": [
+        {
+          "id": "field-auth-type",
+          "type": "select",
+          "label": "Тип аутентификации",
+          "required": true,
+          "options": [
+            { "value": "bearer", "label": "Bearer Token (JWT)" },
+            { "value": "api-key", "label": "API Key" },
+            { "value": "oauth2", "label": "OAuth 2.0" },
+            { "value": "basic", "label": "Basic Auth" }
+          ]
+        },
+        {
+          "id": "field-auth-header",
+          "type": "text",
+          "label": "Header для аутентификации",
+          "placeholder": "Authorization",
+          "required": true,
+          "aiPrompt": "Предложи стандартное название header на основе типа аутентификации",
+          "aiAutoFill": true,
+          "aiDependsOn": ["field-auth-type"]
+        },
+        {
+          "id": "field-token-lifetime",
+          "type": "number",
+          "label": "Время жизни токена (минуты)",
+          "placeholder": "60",
+          "required": false,
+          "validation": {
+            "min": 5,
+            "max": 10080
+          }
+        },
+        {
+          "id": "field-auth-example",
+          "type": "textarea",
+          "label": "Пример аутентификации",
+          "placeholder": "curl -H \"Authorization: Bearer TOKEN\" ...",
+          "required": true,
+          "aiPrompt": "Создай пример curl запроса с аутентификацией на основе выбранного типа",
+          "aiAutoFill": true,
+          "aiDependsOn": ["field-auth-type", "field-auth-header", "field-base-url"]
+        }
+      ]
+    },
+    {
+      "id": "section-003",
+      "name": "Endpoints - User Management",
+      "description": "API endpoints для управления пользователями",
+      "tags": ["endpoints", "users"],
+      "repeatable": true,
+      "fields": [
+        {
+          "id": "field-endpoint-method",
+          "type": "select",
+          "label": "HTTP Метод",
+          "required": true,
+          "options": [
+            { "value": "GET", "label": "GET" },
+            { "value": "POST", "label": "POST" },
+            { "value": "PUT", "label": "PUT" },
+            { "value": "PATCH", "label": "PATCH" },
+            { "value": "DELETE", "label": "DELETE" }
+          ]
+        },
+        {
+          "id": "field-endpoint-path",
+          "type": "text",
+          "label": "Path",
+          "placeholder": "/api/v1/users",
+          "required": true,
+          "aiValidation": {
+            "pattern": "^/api/v[0-9]+/.*",
+            "errorMessage": "Path должен начинаться с /api/vX/"
+          }
+        },
+        {
+          "id": "field-endpoint-description",
+          "type": "textarea",
+          "label": "Описание",
+          "placeholder": "Что делает этот endpoint...",
+          "required": true,
+          "aiPrompt": "Опиши назначение endpoint на основе HTTP метода и path",
+          "aiAutoFill": true,
+          "aiDependsOn": ["field-endpoint-method", "field-endpoint-path"]
+        },
+        {
+          "id": "field-endpoint-auth-required",
+          "type": "checkbox",
+          "label": "Требуется аутентификация",
+          "required": false
+        },
+        {
+          "id": "field-endpoint-parameters",
+          "type": "textarea",
+          "label": "Параметры запроса (JSON)",
+          "placeholder": "{\n  \"name\": \"string\",\n  \"email\": \"string\"\n}",
+          "required": false,
+          "aiPrompt": "Создай типичную структуру параметров для этого endpoint",
+          "aiAutoFill": true,
+          "aiDependsOn": ["field-endpoint-method", "field-endpoint-path"]
+        },
+        {
+          "id": "field-endpoint-response",
+          "type": "textarea",
+          "label": "Пример ответа (JSON)",
+          "placeholder": "{\n  \"id\": 1,\n  \"name\": \"John\"\n}",
+          "required": false,
+          "aiPrompt": "Создай пример успешного ответа для этого endpoint",
+          "aiAutoFill": true,
+          "aiDependsOn": ["field-endpoint-method", "field-endpoint-path"]
+        },
+        {
+          "id": "field-endpoint-errors",
+          "type": "textarea",
+          "label": "Возможные ошибки",
+          "placeholder": "400 - Bad Request\n401 - Unauthorized",
+          "required": false,
+          "aiPrompt": "Перечисли типичные коды ошибок для этого типа endpoint",
+          "aiAutoFill": true,
+          "aiDependsOn": ["field-endpoint-method"]
+        }
+      ]
+    },
+    {
+      "id": "section-004",
+      "name": "Endpoints - Products",
+      "description": "API endpoints для работы с продуктами",
+      "tags": ["endpoints", "products"],
+      "repeatable": true,
+      "fields": [
+        {
+          "id": "field-product-endpoint-method",
+          "type": "select",
+          "label": "HTTP Метод",
+          "required": true,
+          "options": [
+            { "value": "GET", "label": "GET" },
+            { "value": "POST", "label": "POST" },
+            { "value": "PUT", "label": "PUT" },
+            { "value": "PATCH", "label": "PATCH" },
+            { "value": "DELETE", "label": "DELETE" }
+          ]
+        },
+        {
+          "id": "field-product-endpoint-path",
+          "type": "text",
+          "label": "Path",
+          "placeholder": "/api/v1/products",
+          "required": true
+        },
+        {
+          "id": "field-product-endpoint-description",
+          "type": "textarea",
+          "label": "Описание",
+          "required": true,
+          "aiPrompt": "Опиши назначение endpoint для работы с продуктами",
+          "aiAutoFill": true
+        }
+      ]
+    },
+    {
+      "id": "section-005",
+      "name": "Data Models",
+      "description": "Описание моделей данных",
+      "tags": ["models", "schema"],
+      "repeatable": true,
+      "fields": [
+        {
+          "id": "field-model-name",
+          "type": "text",
+          "label": "Название модели",
+          "placeholder": "User",
+          "required": true,
+          "aiHints": ["Используйте PascalCase для названий моделей"]
+        },
+        {
+          "id": "field-model-description",
+          "type": "textarea",
+          "label": "Описание модели",
+          "placeholder": "Модель пользователя системы...",
+          "required": true,
+          "aiPrompt": "Создай краткое описание модели данных",
+          "aiAutoFill": true,
+          "aiDependsOn": ["field-model-name"]
+        },
+        {
+          "id": "field-model-schema",
+          "type": "textarea",
+          "label": "JSON Schema",
+          "placeholder": "{\n  \"id\": \"integer\",\n  \"name\": \"string\"\n}",
+          "required": true,
+          "aiPrompt": "Создай типичную JSON schema для этой модели с основными полями",
+          "aiAutoFill": true,
+          "aiDependsOn": ["field-model-name"]
+        }
+      ]
+    },
+    {
+      "id": "section-006",
+      "name": "Rate Limiting",
+      "description": "Ограничения на количество запросов",
+      "tags": ["limits", "throttling"],
+      "fields": [
+        {
+          "id": "field-rate-limit-enabled",
+          "type": "checkbox",
+          "label": "Rate limiting включен",
+          "required": false
+        },
+        {
+          "id": "field-rate-limit-requests",
+          "type": "number",
+          "label": "Максимум запросов",
+          "placeholder": "100",
+          "required": false,
+          "conditions": [
+            {
+              "fieldId": "field-rate-limit-enabled",
+              "operator": "equals",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "field-rate-limit-window",
+          "type": "select",
+          "label": "Временное окно",
+          "required": false,
+          "options": [
+            { "value": "minute", "label": "Минута" },
+            { "value": "hour", "label": "Час" },
+            { "value": "day", "label": "День" }
+          ],
+          "conditions": [
+            {
+              "fieldId": "field-rate-limit-enabled",
+              "operator": "equals",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "section-007",
+      "name": "Error Handling",
+      "description": "Стандартные коды ошибок и их обработка",
+      "tags": ["errors", "exceptions"],
+      "fields": [
+        {
+          "id": "field-error-format",
+          "type": "textarea",
+          "label": "Формат ответа с ошибкой",
+          "placeholder": "{\n  \"error\": \"...\",\n  \"code\": \"...\"\n}",
+          "required": true,
+          "aiPrompt": "Создай стандартный формат JSON для ошибок API",
+          "aiAutoFill": true
+        },
+        {
+          "id": "field-error-codes",
+          "type": "textarea",
+          "label": "Список кодов ошибок",
+          "placeholder": "400 - Bad Request\n401 - Unauthorized\n...",
+          "required": true,
+          "aiPrompt": "Перечисли стандартные HTTP коды ошибок с описаниями",
+          "aiAutoFill": true
+        }
+      ]
+    },
+    {
+      "id": "section-008",
+      "name": "Webhooks",
+      "description": "Настройка и использование webhooks",
+      "tags": ["webhooks", "callbacks"],
+      "repeatable": true,
+      "fields": [
+        {
+          "id": "field-webhook-event",
+          "type": "text",
+          "label": "Название события",
+          "placeholder": "user.created",
+          "required": true
+        },
+        {
+          "id": "field-webhook-description",
+          "type": "textarea",
+          "label": "Описание",
+          "required": true,
+          "aiPrompt": "Опиши когда срабатывает этот webhook",
+          "aiAutoFill": true,
+          "aiDependsOn": ["field-webhook-event"]
+        },
+        {
+          "id": "field-webhook-payload",
+          "type": "textarea",
+          "label": "Payload структура",
+          "required": true,
+          "aiPrompt": "Создай пример payload для этого webhook события",
+          "aiAutoFill": true,
+          "aiDependsOn": ["field-webhook-event"]
+        }
+      ]
+    }
+  ],
+  "aiKnowledgeBase": {
+    "faqs": [
+      {
+        "question": "Как добавить новый endpoint?",
+        "answer": "Перейдите в соответствующий раздел (User Management, Products и т.д.), нажмите '+' для добавления нового endpoint. AI автоматически предложит описание на основе метода и пути.",
+        "relatedSections": ["section-003", "section-004"]
+      },
+      {
+        "question": "Какие поля обязательные?",
+        "answer": "Обязательные поля отмечены звездочкой (*). Для endpoints обязательны: HTTP метод, Path и Описание. Для моделей: Название и JSON Schema.",
+        "relatedSections": ["section-003", "section-005"]
+      },
+      {
+        "question": "Как работает автозаполнение?",
+        "answer": "AI анализирует уже заполненные поля и автоматически генерирует релевантный контент. Нажмите кнопку 'AI' рядом с полем или спросите AI помощника.",
+        "relatedSections": []
+      }
+    ],
+    "glossary": {
+      "endpoint": "Точка входа в API - URL и HTTP метод для выполнения операции",
+      "payload": "Данные, передаваемые в теле HTTP запроса",
+      "rate limiting": "Ограничение количества запросов от клиента за единицу времени",
+      "webhook": "HTTP callback, который срабатывает при определённом событии"
+    }
+  }
+}
